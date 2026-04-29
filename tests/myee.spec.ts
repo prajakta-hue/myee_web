@@ -220,7 +220,7 @@ test("Verify homepage loads within accptable time", async({page})=>{
 
 })
 
-test.only("verify images loads correctly", async({page})=>{
+test("verify images loads correctly", async({page})=>{
 
     //await page.goto("http://satikosarep9@gmail.com:Prajakta@2206@business.ee.co.uk/")
 
