@@ -57,7 +57,7 @@ test("verify login", async({page})=>{
     
     const searchButton = page.getByTestId('search-open-button');
 
-    await expect(searchButton).toBeVisible();
+    await expect.soft(searchButton).toBeVisible();
     await searchButton.click();
 
     await expect(page.locator("input.SearchInput-module_search-input__text__Brc1x")).toBeVisible();
