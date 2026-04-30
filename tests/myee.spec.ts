@@ -64,8 +64,8 @@ test("Verify filter/sort funtionality", async({page})=>{
     
 ]);
     await page.waitForTimeout(7000);
+    await expect(page.getByRole('combobox')).toBeVisible();
     await page.getByRole('combobox').click();
-    
     await page.getByRole('option', {name: 'Monthly price (low to high)'}).click();
 
 
@@ -188,7 +188,7 @@ test("Verify product added to cart", async({page})=>{
 
 test("Verify buttons on page are enabled/disabled", async({page})=>{
 
-    page.goto("https://business.ee.co.uk/")
+    await page.goto("https://business.ee.co.uk/")
 
     const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
     await cookie.click();
