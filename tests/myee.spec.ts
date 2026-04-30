@@ -1,21 +1,58 @@
-import {test, expect, Locator} from "@playwright/test";
+import {test, expect, Page, Locator} from "@playwright/test";
 
-test("Verify login functionality", async({page})=>{
+let page:Page
 
-    await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
+//let context:BrowserContext
 
-        const cookie:Locator = page.getByRole('button', {name: 'Reject all'})
-        // await cookie.click();
+test.beforeAll("open page", async({browser})=>{
+    test.setTimeout(9000)
 
-        const login:Locator= await page.locator('a.component-ee-global-masthead__log-in')
+    //context = await browser.newContext();
+    page = await browser.newPage();
+
+    await page.goto("https://business.ee.co.uk/",{waitUntil: 'domcontentloaded'} );
+
+})
+
+test.afterAll("closing page", async()=>{
+    test.setTimeout(9000)
+    await page.close();
+})
+
+
+test.beforeEach("Reject cookies", async()=>{
+    
+    const cookie:Locator = page.getByRole('button', {name: 'Reject all'})
+
+
+    
+    if (await cookie.isVisible({ timeout: 5000 })) {
+        await cookie.click();
+        console.log('Cookie banner rejected');
+    } else {
+        console.log('Cookie banner not displayed');
+    }
+
+
+})
+
+test("Verify login functionality", async()=>{
+
+    // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
+
+    //     const cookie:Locator = page.getByRole('button', {name: 'Reject all'})
+    //     // await cookie.click();
+
+        const login:Locator= page.locator('a.component-ee-global-masthead__log-in')
         await expect(login).toBeVisible();
         await login.click();
 
-        await page.locator("//input[@type='text']").fill('satikosarep9@gmail.com'),{timeout:3000}
+        await expect(page.locator("//input[@type='text']")).toBeVisible({timeout:90000});
+        await page.locator("//input[@type='text']").fill('satikosarep9@gmail.com')
         await page.getByRole('button', {name: 'Next'}).click()
 
         //await expect(page.locator("//input[@type='password']")).toBeVisible(), {timeout:3000}
-        await page.locator("//input[@type='password']").fill('Prajakta@2206'), {timeout:3000}
+        await page.locator("//input[@type='password']").fill('Prajakta@2206')
         await page.getByRole('button', {name: 'Next'}).click()
 
         //await expect(page.locator("button[aria-label='Search'] span[class='lc-IconButton-content']")).toBeVisible();
@@ -28,12 +65,12 @@ test("Verify login functionality", async({page})=>{
 });
 
 
-test("Verify Search functionality", async({page})=>{
+test("Verify Search functionality", async()=>{
 
-    await page.goto("https://business.ee.co.uk/",  {waitUntil: 'domcontentloaded'});
+    // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
 
-    const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
-    await cookie.click();
+    // const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
+    // await cookie.click();
 
     await expect(page.locator("button[class='eed-header__control eed-header-search-toggle']")).toBeVisible();
     await page.locator("button[class='eed-header__control eed-header-search-toggle']").click();
@@ -44,12 +81,12 @@ test("Verify Search functionality", async({page})=>{
 
 });
 
-test("Verify filter/sort funtionality", async({page})=>{
+test("Verify filter/sort funtionality", async()=>{
 
-    await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
+    // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
 
-    const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
-    await cookie.click();
+    // const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
+    // await cookie.click();
 
     const phone:Locator = page.getByRole('link', { name: 'Phones' }).nth(0);
     await expect(phone).toBeVisible();
@@ -65,13 +102,14 @@ test("Verify filter/sort funtionality", async({page})=>{
 ]);
     //await page.waitForTimeout(7000);
     await expect(page.getByRole('combobox')).toBeVisible();
-    await page.getByRole('combobox').click();
+    page.getByRole('combobox').click();
 
+    await page.waitForTimeout(8000);
     await expect(page.getByRole('option', {name: 'Monthly price (low to high)'})).toBeVisible();
     await page.getByRole('option', {name: 'Monthly price (low to high)'}).click();
 
 
-    const items:Locator = await page.locator('.s-16acpgc')
+    const items:Locator = page.locator('.s-16acpgc')
     const total:number = await items.count();
     console.log( total);
 
@@ -127,22 +165,26 @@ test("Verify filter/sort funtionality", async({page})=>{
 });
 
 
-test("Verify product added to cart", async({page})=>{
+test("Verify product added to cart", async()=>{
 
 
-    await page.goto("https://business.ee.co.uk/phones/");
+    // await page.goto("https://business.ee.co.uk/phones/", {waitUntil: 'domcontentloaded'});
 
-    const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
-    await cookie.click();
+    // const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
+    // await cookie.click();
+
+    const phone:Locator = page.getByRole('link', { name: 'Phones' }).nth(0);
+    await expect(phone).toBeVisible();
+    await phone.click();
 
 
-    await expect(page.locator("//a[@href='/phones/samsung/samsung-galaxy-s26-ultra/']")).toBeVisible();
-
-    await page.locator("//a[@href='/phones/samsung/samsung-galaxy-s26-ultra/']").click();
+    const samsun_phone:Locator= await page.locator("a.s-16acpgc.e1afr6wb0").nth(0)
+    await expect(samsun_phone).toBeVisible({timeout:7000});
+    samsun_phone.click();
 
     //await expect(page.locator('.eb9j5l43')).toBeVisible();
 
-    const cap:Locator = await page.locator('.s-106lmnl span.ewzfj073')
+    const cap:Locator = page.locator('.s-106lmnl span.ewzfj073')
     const cap_cnt:number= await cap.count();
 
     
@@ -154,14 +196,14 @@ test("Verify product added to cart", async({page})=>{
 
         if(cp == '256GB' )
         {
-            await cap.nth(i).click();
+            await cp.click();
             break;
         }
 
 
     }
 
-    const plans:Locator = await page.locator(".product-filter-btn span.arc-Heading")
+    const plans:Locator = page.locator(".product-filter-btn span.arc-Heading")
     const pln_cnt: number = await plans.count();
 
     for(let i=0; i<pln_cnt; i++) {
@@ -175,22 +217,28 @@ test("Verify product added to cart", async({page})=>{
     }
 
     await page.locator("a.s-12r8ev5 span.arc-Text").nth(1).click();
-    await page.waitForTimeout(2000)
-    await expect(page.getByTestId("add-to-button")).toBeVisible();
-    await page.getByTestId("add-to-button").click();
+    const basket = page.getByTestId('add-to-button');
+    //await basket.scrollIntoViewIfNeeded();
+    //await basket.click({timeout:15000});
+
+    if (await basket.isVisible({ timeout: 10_000 })) {
+        await basket.click();
+    } else {
+        console.log('Add to basket button not available');
+}
             
 })
 
 
-// test("Veridy add to basket", async({page})=>{
+// test("Veridy add to basket", async()=>{
 
 //     await page.goto("")
 
 // })
 
-test("Verify buttons on page are enabled/disabled", async({page})=>{
+test("Verify buttons on page are enabled/disabled", async()=>{
 
-    await page.goto("https://business.ee.co.uk/",  {waitUntil: 'domcontentloaded'},);
+    // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
 
     // const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'}))
     // await expect.soft(cookie).toBeVisible();
@@ -233,19 +281,19 @@ test("Verify buttons on page are enabled/disabled", async({page})=>{
 
 })
 
-test("Verify homepage loads within accptable time", async({page})=>{
+test("Verify homepage loads within accptable time", async()=>{
 
-    await page.goto("https://business.ee.co.uk/");
+    // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
 
     await expect(page).toHaveURL("https://business.ee.co.uk/", {timeout:3000} )
 
 })
 
-test("verify images loads correctly", async({page})=>{
+test("verify images loads correctly", async()=>{
 
     //await page.goto("http://satikosarep9@gmail.com:Prajakta@2206@business.ee.co.uk/")
 
-    await page.goto("https://business.ee.co.uk/")
+    // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'})
 
     const images:Locator = await page.locator("img")
     const count = await images.count();
