@@ -188,7 +188,7 @@ test("Verify product added to cart", async({page})=>{
 
 // })
 
-test.only("Verify buttons on page are enabled/disabled", async({page})=>{
+test("Verify buttons on page are enabled/disabled", async({page})=>{
 
     await page.goto("https://business.ee.co.uk/",  {waitUntil: 'domcontentloaded'},);
 
