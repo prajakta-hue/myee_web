@@ -48,11 +48,11 @@ test("Verify login functionality", async()=>{
         await login.click();
 
         await expect(page.locator("//input[@type='text']")).toBeVisible({timeout:90000});
-        await page.locator("//input[@type='text']").fill('satikosarep9@gmail.com')
+        await page.locator("//input[@type='text']").fill('')
         await page.getByRole('button', {name: 'Next'}).click()
 
         //await expect(page.locator("//input[@type='password']")).toBeVisible(), {timeout:3000}
-        await page.locator("//input[@type='password']").fill('Prajakta@2206')
+        await page.locator("//input[@type='password']").fill('@')
         await page.getByRole('button', {name: 'Next'}).click()
 
         //await expect(page.locator("button[aria-label='Search'] span[class='lc-IconButton-content']")).toBeVisible();

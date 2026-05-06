@@ -21,7 +21,7 @@ test("verify login", async({page})=>{
     await page.getByRole('button', {name: 'Next'}).click()
 
     await expect(page.locator("//input[@type='password']")).toBeVisible();
-    await page.locator("//input[@type='password']").fill('@2206')
+    await page.locator("//input[@type='password']").fill('@')
     await page.getByRole('button', {name: 'Next'}).click()
 
     // await expect(page.locator('accordion-title')).toBeVisible()
