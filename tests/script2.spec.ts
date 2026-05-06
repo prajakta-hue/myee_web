@@ -2,22 +2,26 @@ import {test, expect, Locator} from '@playwright/test'
 
 test("verify login", async({page})=>{
 
-    await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
+    await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'})
+
+    test.setTimeout(9000)
+
+    
 
 
     // const cookie:Locator = await (page.getByRole('button', {name: 'Reject all'})))
     // await cookie.click();
 
-    const login:Locator= await page.locator('a.component-ee-global-masthead__log-in')
+    const login:Locator= page.locator('a.component-ee-global-masthead__log-in')
     await expect(login).toBeVisible();
     await login.click();
 
 
-    await page.locator("//input[@type='text']").fill('satikosarep9@gmail.com')
+    await page.locator("//input[@type='text']").fill('')
     await page.getByRole('button', {name: 'Next'}).click()
 
     await expect(page.locator("//input[@type='password']")).toBeVisible();
-    await page.locator("//input[@type='password']").fill('Prajakta@2206')
+    await page.locator("//input[@type='password']").fill('@2206')
     await page.getByRole('button', {name: 'Next'}).click()
 
     // await expect(page.locator('accordion-title')).toBeVisible()
@@ -57,7 +61,7 @@ test("verify login", async({page})=>{
     
     const searchButton = page.getByTestId('search-open-button');
 
-    await expect.soft(searchButton).toBeVisible();
+    await expect(searchButton).toBeVisible();
     await searchButton.click();
 
     await expect(page.locator("input.SearchInput-module_search-input__text__Brc1x")).toBeVisible();

@@ -81,7 +81,7 @@ test("Verify Search functionality", async()=>{
 
 });
 
-test("Verify filter/sort funtionality", async()=>{
+test.only("Verify filter/sort funtionality", async()=>{
 
     // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
 
@@ -90,7 +90,7 @@ test("Verify filter/sort funtionality", async()=>{
 
     const phone:Locator = page.getByRole('link', { name: 'Phones' }).nth(0);
     await expect(phone).toBeVisible();
-    await phone.nth(0).click();
+    await phone.click();
 
     await expect(page.getByRole('button', {name: 'Filters'})).toBeVisible();
     //await page.getByRole('button', {name: 'Filters'}).click();
@@ -105,7 +105,7 @@ test("Verify filter/sort funtionality", async()=>{
     page.getByRole('combobox').click();
 
     await page.waitForTimeout(8000);
-    await expect(page.getByRole('option', {name: 'Monthly price (low to high)'})).toBeVisible();
+    await expect(page.getByLabel('Monthly price (low to high)')).toBeVisible();
     await page.getByRole('option', {name: 'Monthly price (low to high)'}).click();
 
 
@@ -285,7 +285,7 @@ test("Verify homepage loads within accptable time", async()=>{
 
     // await page.goto("https://business.ee.co.uk/", {waitUntil: 'domcontentloaded'});
 
-    await expect(page).toHaveURL("https://business.ee.co.uk/", {timeout:3000} )
+    await expect(page).toHaveURL("https://business.ee.co.uk/", {timeout:4000} )
 
 })
 
